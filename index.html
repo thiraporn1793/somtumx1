@@ -2,7 +2,6 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <!-- Meta tag สำคัญสำหรับมือถือ -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>เกมเก็บผลไม้</title>
     <link rel="stylesheet" href="style.css">
@@ -15,12 +14,17 @@
         <button id="startButton">🏁 เริ่มเกม 🏁</button>
     </div>
 
-    <!-- ลบ width/height ออก เพื่อให้ปรับขนาดตาม CSS -->
     <canvas id="gameCanvas"></canvas>
 
     <div class="game-info">
         <h2>คะแนน: <span id="score">0</span></h2>
         <h2>เวลา: <span id="timer">60</span></h2>
+    </div>
+
+    <!-- เพิ่ม: ปุ่มควบคุมสำหรับมือถือ -->
+    <div id="touch-controls">
+        <button id="left-btn">&lt;</button>
+        <button id="right-btn">&gt;</button>
     </div>
 
     <div id="leaderboard" class="menu-container">

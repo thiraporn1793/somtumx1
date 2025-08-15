@@ -10,8 +10,12 @@ const leaderboardElement = document.getElementById('leaderboard');
 const finalScoreElement = document.getElementById('finalScore');
 const highScoresListElement = document.getElementById('highScoresList');
 const restartButton = document.getElementById('restartButton');
+// --- เพิ่ม: อ้างอิงปุ่มควบคุม ---
+const touchControls = document.getElementById('touch-controls');
+const leftBtn = document.getElementById('left-btn');
+const rightBtn = document.getElementById('right-btn');
 
-// โหลดรูปภาพ (แก้ไขนามสกุลเป็น .png)
+// โหลดรูปภาพ
 const playerImg = new Image(); playerImg.src = 'player.png';
 const bananaImg = new Image(); bananaImg.src = 'banana.png';
 const appleImg = new Image(); appleImg.src = 'apple.png';
@@ -38,7 +42,6 @@ function resizeCanvas() {
     canvas.width = newWidth;
     canvas.height = newHeight;
 
-    // ปรับขนาดและตำแหน่ง player ให้เหมาะสมกับขนาดจอใหม่
     player.width = canvas.width * 0.1;
     player.height = player.width * 1.25;
     player.x = (canvas.width / 2) - (player.width / 2);
@@ -55,7 +58,6 @@ function drawUI() { scoreElement.textContent = score; timerElement.textContent =
 function spawnItem() {
     const random = Math.random();
     let newItem;
-    // ปรับขนาดและความเร็วไอเท็มตามขนาดจอ
     const baseSize = canvas.width * 0.07;
     const baseSpeed = canvas.height * 0.005;
 
@@ -91,12 +93,13 @@ function detectCollisions() {
 function startGame() {
     score = 0; timeRemaining = GAME_DURATION; items = []; gameOver = false;
     player.dx = 0;
-    resizeCanvas(); // ปรับขนาดก่อนเริ่มเกม
+    resizeCanvas();
 
     leaderboardElement.style.display = 'none';
     startMenuElement.style.display = 'none';
     gameInfoElement.style.display = 'flex';
     canvas.style.display = 'block';
+    touchControls.style.display = 'flex'; // --- เพิ่ม: แสดงปุ่มควบคุม ---
 
     const startTime = Date.now();
     gameInterval = setInterval(() => {
@@ -116,6 +119,7 @@ function endGame() {
     finalScoreElement.textContent = score;
     gameInfoElement.style.display = 'none';
     canvas.style.display = 'none';
+    touchControls.style.display = 'none'; // --- เพิ่ม: ซ่อนปุ่มควบคุม ---
     saveHighScore(score);
     showLeaderboard();
 }
@@ -142,8 +146,26 @@ function update() {
 // 8. Event Listeners
 document.addEventListener('keydown', e => { if (!gameOver && (e.key === 'ArrowRight' || e.key === 'd')) player.dx = player.speed; if (!gameOver && (e.key === 'ArrowLeft' || e.key === 'a')) player.dx = -player.speed; });
 document.addEventListener('keyup', e => { if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'ArrowLeft' || e.key === 'a') player.dx = 0; });
-canvas.addEventListener('touchstart', e => { e.preventDefault(); if (!gameOver) { let touchX = e.touches[0].clientX; if (touchX > window.innerWidth / 2) player.dx = player.speed; else player.dx = -player.speed; } });
-canvas.addEventListener('touchend', e => { e.preventDefault(); player.dx = 0; });
+
+// --- เพิ่ม: Event Listener สำหรับปุ่มควบคุม (รองรับทั้งกดค้างและคลิก) ---
+function handlePointerDown(direction) {
+    if (gameOver) return;
+    player.dx = direction === 'left' ? -player.speed : player.speed;
+}
+function handlePointerUp() {
+    player.dx = 0;
+}
+
+leftBtn.addEventListener('touchstart', (e) => { e.preventDefault(); handlePointerDown('left'); });
+leftBtn.addEventListener('touchend', (e) => { e.preventDefault(); handlePointerUp(); });
+leftBtn.addEventListener('mousedown', () => handlePointerDown('left'));
+leftBtn.addEventListener('mouseup', () => handlePointerUp());
+
+rightBtn.addEventListener('touchstart', (e) => { e.preventDefault(); handlePointerDown('right'); });
+rightBtn.addEventListener('touchend', (e) => { e.preventDefault(); handlePointerUp(); });
+rightBtn.addEventListener('mousedown', () => handlePointerDown('right'));
+rightBtn.addEventListener('mouseup', () => handlePointerUp());
+
 restartButton.addEventListener('click', startGame);
 startButton.addEventListener('click', startGame);
 
@@ -153,6 +175,7 @@ function initializeUI() {
     canvas.style.display = 'none';
     leaderboardElement.style.display = 'none';
     startMenuElement.style.display = 'flex';
+    touchControls.style.display = 'none'; // --- เพิ่ม: ซ่อนปุ่มตอนแรก ---
 }
 
 // --- เรียกใช้ฟังก์ชันเมื่อโหลดหน้าและมีการปรับขนาด ---
