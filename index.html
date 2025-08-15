@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <!-- Meta tag สำคัญสำหรับมือถือ -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>เกมเก็บผลไม้</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="startMenu" class="menu-container">
+        <h1>เกมเก็บผลไม้</h1>
+        <p>เก็บผลไม้ให้ได้คะแนนเยอะที่สุดใน 60 วินาที!</p>
+        <button id="startButton">🏁 เริ่มเกม 🏁</button>
+    </div>
+
+    <!-- ลบ width/height ออก เพื่อให้ปรับขนาดตาม CSS -->
+    <canvas id="gameCanvas"></canvas>
+
+    <div class="game-info">
+        <h2>คะแนน: <span id="score">0</span></h2>
+        <h2>เวลา: <span id="timer">60</span></h2>
+    </div>
+
+    <div id="leaderboard" class="menu-container">
+        <h2>จบเกม!</h2>
+        <h3>คะแนนของคุณ: <span id="finalScore">0</span></h3>
+        <h2>ตารางอันดับ (Top 5)</h2>
+        <ol id="highScoresList"></ol>
+        <button id="restartButton">เล่นอีกครั้ง</button>
+    </div>
+
+    <script src="game.js"></script>
+
+</body>
+</html>
